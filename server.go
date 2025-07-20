@@ -20,8 +20,6 @@ const defaultPort = "8080"
 
 func main() {
 
-	log.Println("SECRET_KEY is:", os.Getenv("SECRET_KEY"))
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
