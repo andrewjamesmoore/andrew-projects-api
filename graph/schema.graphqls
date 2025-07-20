@@ -3,7 +3,7 @@ type Query {
 }
 
 type Project {
-  id: String!
+  _id: String!
   title: String!
   description: String!
   status: String!

@@ -119,7 +119,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Project.Giturl(childComplexity), true
 
-	case "Project.id":
+	case "Project._id":
 		if e.complexity.Project.ID == nil {
 			break
 		}
@@ -503,8 +503,8 @@ func (ec *executionContext) fieldContext_Mutation_createProject(ctx context.Cont
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Project_id(ctx, field)
+			case "_id":
+				return ec.fieldContext_Project__id(ctx, field)
 			case "title":
 				return ec.fieldContext_Project_title(ctx, field)
 			case "description":
@@ -537,8 +537,8 @@ func (ec *executionContext) fieldContext_Mutation_createProject(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Project_id(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Project_id(ctx, field)
+func (ec *executionContext) _Project__id(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Project__id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -568,7 +568,7 @@ func (ec *executionContext) _Project_id(ctx context.Context, field graphql.Colle
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Project_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Project__id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Project",
 		Field:      field,
@@ -925,8 +925,8 @@ func (ec *executionContext) fieldContext_Query_project(ctx context.Context, fiel
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Project_id(ctx, field)
+			case "_id":
+				return ec.fieldContext_Project__id(ctx, field)
 			case "title":
 				return ec.fieldContext_Project_title(ctx, field)
 			case "description":
@@ -3175,8 +3175,8 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Project")
-		case "id":
-			out.Values[i] = ec._Project_id(ctx, field, obj)
+		case "_id":
+			out.Values[i] = ec._Project__id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
