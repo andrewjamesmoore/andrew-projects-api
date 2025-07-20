@@ -62,6 +62,29 @@ func (r *queryResolver) Project(ctx context.Context, id string) (*model.Project,
 	return database.ConvertToGraphQL(&dbProject), nil
 }
 
+// Projects is the resolver for the projects field.
+func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) {
+	collection := r.DB.Client.Database(os.Getenv("MONGO_DB")).Collection("projects")
+
+	cursor, err := collection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var dbProjects []database.DBProject
+	if err := cursor.All(ctx, &dbProjects); err != nil {
+		return nil, err
+	}
+
+	var result []*model.Project
+	for _, dbProj := range dbProjects {
+		result = append(result, database.ConvertToGraphQL(&dbProj))
+	}
+
+	return result, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
