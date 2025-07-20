@@ -16,7 +16,7 @@ type NewProject struct {
 }
 
 type Project struct {
-	ID          string   `json:"id"`
+	ID          string   `json:"id" bson:"_id"`
 	Title       string   `json:"title"`
 	Description string   `json:"description"`
 	Status      string   `json:"status"`

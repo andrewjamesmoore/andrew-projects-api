@@ -1,4 +1,5 @@
-version: "3"
+version: "3.8"
+
 services:
   mongo:
     image: mongo:6.0
@@ -8,6 +9,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    env_file: .env
 
   graphql-api:
     build: .
@@ -17,4 +19,6 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGO_URI=${MONGO_URI}
+      MONGO_URI: ${MONGO_URI}
+    env_file: .env
+

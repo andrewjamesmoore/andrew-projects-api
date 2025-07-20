@@ -1,6 +1,6 @@
 module github.com/andrewjamesmoore/andrew-projects-api
 
-go 1.24.5
+go 1.23.6
 
 require (
 	github.com/99designs/gqlgen v0.17.76

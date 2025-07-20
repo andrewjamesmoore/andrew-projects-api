@@ -1,13 +1,21 @@
-FROM golang:1.24.5 AS builder
+FROM golang:1.23.6-bullseye AS builder
 
 WORKDIR /app
-COPY . .
+
+COPY go.mod ./
+COPY go.sum ./
 RUN go mod download
-RUN go build -o graphql-api ./server.go
+
+COPY . ./
+RUN go build -o graphql-api .
 
 FROM debian:bullseye-slim
+
 WORKDIR /app
+
 COPY --from=builder /app/graphql-api .
 
 EXPOSE 8080
+
 CMD ["./graphql-api"]
+
