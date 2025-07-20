@@ -38,18 +38,20 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input model.NewPro
 func (r *queryResolver) Project(ctx context.Context, id string) (*model.Project, error) {
 	collection := r.DB.Client.Database("andrew_sh").Collection("projects")
 
-	var project model.Project
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
-	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&project)
+
+	var dbProject model.DBProject
+	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&dbProject)
 	if err != nil {
 		return nil, err
 	}
 
-	return &project, nil
+	return toGraphQLProject(&dbProject), nil
 }
+
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
