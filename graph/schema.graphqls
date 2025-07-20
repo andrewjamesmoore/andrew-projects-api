@@ -1,9 +1,5 @@
-type Query {
-  project(id: String!): Project!
-}
-
 type Project {
-  _id: String!
+  id: ID!
   title: String!
   description: String!
   status: String!
@@ -21,6 +17,10 @@ input NewProject {
   url: String!
   giturl: String
   tags: [String!]!
+}
+
+type Query {
+  project(id: ID!): Project
 }
 
 type Mutation {

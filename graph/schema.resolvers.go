@@ -6,16 +6,23 @@ package graph
 
 import (
 	"context"
+	"errors"
+	"os"
 
+	"github.com/andrewjamesmoore/andrew-projects-api/database"
 	"github.com/andrewjamesmoore/andrew-projects-api/graph/model"
+	"github.com/andrewjamesmoore/andrew-projects-api/middleware"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input model.NewProject) (*model.Project, error) {
-	project := model.Project{
-		ID:          primitive.NewObjectID().Hex(),
+	if middleware.GetSecretKey(ctx) != os.Getenv("SECRET_KEY") {
+		return nil, errors.New("unauthorized")
+	}
+
+	project := database.DBProject{
 		Title:       input.Title,
 		Description: input.Description,
 		Status:      input.Status,
@@ -25,33 +32,35 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input model.NewPro
 		Tags:        input.Tags,
 	}
 
-	collection := r.DB.Client.Database("andrew_sh").Collection("projects")
-	_, err := collection.InsertOne(ctx, project)
+	collection := r.DB.Client.Database(os.Getenv("MONGO_DB")).Collection("projects")
+	result, err := collection.InsertOne(ctx, project)
 	if err != nil {
 		return nil, err
 	}
 
-	return &project, nil
+	insertedID := result.InsertedID.(primitive.ObjectID)
+	project.ID = insertedID
+
+	return database.ConvertToGraphQL(&project), nil
 }
 
 // Project is the resolver for the project field.
 func (r *queryResolver) Project(ctx context.Context, id string) (*model.Project, error) {
-	collection := r.DB.Client.Database("andrew_sh").Collection("projects")
-
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
 
-	var dbProject model.DBProject
+	var dbProject database.DBProject
+	collection := r.DB.Client.Database("andrew_sh").Collection("projects")
+
 	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&dbProject)
 	if err != nil {
 		return nil, err
 	}
 
-	return toGraphQLProject(&dbProject), nil
+	return database.ConvertToGraphQL(&dbProject), nil
 }
-
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }

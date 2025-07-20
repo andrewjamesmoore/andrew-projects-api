@@ -12,18 +12,22 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/andrewjamesmoore/andrew-projects-api/database"
 	"github.com/andrewjamesmoore/andrew-projects-api/graph"
+	"github.com/andrewjamesmoore/andrew-projects-api/middleware"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
 const defaultPort = "8080"
 
 func main() {
+
+	log.Println("SECRET_KEY is:", os.Getenv("SECRET_KEY"))
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-db := database.Connect()
+	db := database.Connect()
 
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{
 		Resolvers: &graph.Resolver{DB: db},
@@ -40,8 +44,8 @@ db := database.Connect()
 		Cache: lru.New[string](100),
 	})
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+		http.Handle("/", playground.Handler("GraphQL Playground", "/query"))
+	http.Handle("/query", middleware.WithSecretHeader(srv))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
