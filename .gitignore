@@ -25,3 +25,21 @@ Thumbs.db
 # env files
 .env
 .env.*
+
+# Terraform state
+*.tfstate
+*.tfstate.backup
+
+# Terraform crash logs
+crash.log
+
+# Terraform plan output
+*.tfplan
+
+# Sensitive variable overrides
+terraform.tfvars
+*.auto.tfvars
+
+# Terraform .terraform directory
+.terraform/
+
