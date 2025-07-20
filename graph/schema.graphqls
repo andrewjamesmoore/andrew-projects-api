@@ -1,0 +1,28 @@
+type Query {
+  project(id: String!): Project!
+}
+
+type Project {
+  id: String!
+  title: String!
+  description: String!
+  status: String!
+  link: Boolean!
+  url: String!
+  giturl: String
+  tags: [String!]!
+}
+
+input NewProject {
+  title: String!
+  description: String!
+  status: String!
+  link: Boolean!
+  url: String!
+  giturl: String
+  tags: [String!]!
+}
+
+type Mutation {
+  createProject(input: NewProject!): Project
+}

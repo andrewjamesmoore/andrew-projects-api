@@ -1,0 +1,27 @@
+# Binaries
+/server
+*.exe
+*.out
+*.test
+
+# Build and dependency files
+/dist
+/build
+/vendor/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# Logs and runtime
+*.log
+*.pid
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# env files
+.env
+.env.*
