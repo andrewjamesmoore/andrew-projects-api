@@ -1,9 +1,8 @@
 # Projects API
 
-A GraphQL API built with Go, MongoDB, and deployed using Docker on an EC2 instance.  
-Access the production endpoint at: [https://api.andr3w.sh](https://api.andr3w.sh)
+A GraphQL API built with Go and MongoDB for my portfolio projects and notes.
 
-Is this overkill? Yes, but in the process of learning some GraphQL I set up an API for my portfolio projects using Go.
+Access the production endpoint at: [https://api.andr3w.sh](https://api.andr3w.sh)
 
 ---
 
