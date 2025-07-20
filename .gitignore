@@ -43,3 +43,6 @@ terraform.tfvars
 # Terraform .terraform directory
 .terraform/
 
+# Certs
+certbot/
+
