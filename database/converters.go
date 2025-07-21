@@ -2,7 +2,7 @@ package database
 
 import "github.com/andrewjamesmoore/andrew-projects-api/graph/model"
 
-func ConvertToGraphQL(db *DBProject) *model.Project {
+func ConvertProjectToGraphQL(db *DBProject) *model.Project {
 	return &model.Project{
 		ID:          db.ID.Hex(),
 		Title:       db.Title,
@@ -12,5 +12,15 @@ func ConvertToGraphQL(db *DBProject) *model.Project {
 		URL:         db.URL,
 		Giturl:      db.Giturl,
 		Tags:        db.Tags,
+	}
+}
+
+func ConvertNoteToGraphQL(db *DBNote) *model.Note {
+	return &model.Note{
+		ID:          db.ID.Hex(),
+		Title:       db.Title,
+		Description: db.Description,
+		URL:         db.URL,
+		Date:		 db.Date,
 	}
 }

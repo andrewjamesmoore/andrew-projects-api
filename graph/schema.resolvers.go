@@ -16,7 +16,32 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// CreateProject is the resolver for the createProject field.
+// CreateNote is the resolver for the createNote field.
+func (r *mutationResolver) CreateNote(ctx context.Context, input model.NewNote) (*model.Note, error) {
+	if middleware.GetSecretKey(ctx) != os.Getenv("SECRET_KEY") {
+		return nil, errors.New("unauthorized")
+	}
+
+	note := database.DBNote{
+		Title:       input.Title,
+		Description: input.Description,
+		URL:         input.URL,
+		Date:        input.Date,
+	}
+
+	collection := r.DB.Client.Database(os.Getenv("MONGO_DB")).Collection("notes")
+	result, err := collection.InsertOne(ctx, note)
+	if err != nil {
+		return nil, err
+	}
+
+	insertedID := result.InsertedID.(primitive.ObjectID)
+	note.ID = insertedID
+
+	return database.ConvertNoteToGraphQL(&note), nil
+}
+
+// --- CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input model.NewProject) (*model.Project, error) {
 	if middleware.GetSecretKey(ctx) != os.Getenv("SECRET_KEY") {
 		return nil, errors.New("unauthorized")
@@ -41,7 +66,25 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input model.NewPro
 	insertedID := result.InsertedID.(primitive.ObjectID)
 	project.ID = insertedID
 
-	return database.ConvertToGraphQL(&project), nil
+	return database.ConvertProjectToGraphQL(&project), nil
+}
+
+// Note is the resolver for the note field.
+func (r *queryResolver) Note(ctx context.Context, id string) (*model.Note, error) {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var dbNote database.DBNote
+	collection := r.DB.Client.Database("andrew_sh").Collection("notes")
+
+	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&dbNote)
+	if err != nil {
+		return nil, err
+	}
+
+	return database.ConvertNoteToGraphQL(&dbNote), nil
 }
 
 // Project is the resolver for the project field.
@@ -52,6 +95,7 @@ func (r *queryResolver) Project(ctx context.Context, id string) (*model.Project,
 	}
 
 	var dbProject database.DBProject
+
 	collection := r.DB.Client.Database("andrew_sh").Collection("projects")
 
 	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&dbProject)
@@ -59,7 +103,30 @@ func (r *queryResolver) Project(ctx context.Context, id string) (*model.Project,
 		return nil, err
 	}
 
-	return database.ConvertToGraphQL(&dbProject), nil
+	return database.ConvertProjectToGraphQL(&dbProject), nil
+}
+
+// Notes is the resolver for the notes field.
+func (r *queryResolver) Notes(ctx context.Context) ([]*model.Note, error) {
+	collection := r.DB.Client.Database(os.Getenv("MONGO_DB")).Collection("notes")
+
+	cursor, err := collection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var dbNotes []database.DBNote
+	if err := cursor.All(ctx, &dbNotes); err != nil {
+		return nil, err
+	}
+
+	var result []*model.Note
+	for _, dbNte := range dbNotes {
+		result = append(result, database.ConvertNoteToGraphQL(&dbNte))
+	}
+
+	return result, nil
 }
 
 // Projects is the resolver for the projects field.
@@ -79,7 +146,7 @@ func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) 
 
 	var result []*model.Project
 	for _, dbProj := range dbProjects {
-		result = append(result, database.ConvertToGraphQL(&dbProj))
+		result = append(result, database.ConvertProjectToGraphQL(&dbProj))
 	}
 
 	return result, nil

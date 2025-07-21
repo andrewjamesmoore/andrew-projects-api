@@ -1,3 +1,11 @@
+type Note {
+  id: ID!
+  title: String!
+  description: String!
+  url: String!
+  date: String!
+}
+
 type Project {
   id: ID!
   title: String!
@@ -7,6 +15,13 @@ type Project {
   url: String!
   giturl: String
   tags: [String!]!
+}
+
+input NewNote {
+  title: String!
+  description: String!
+  url: String!
+  date: String!
 }
 
 input NewProject {
@@ -20,10 +35,13 @@ input NewProject {
 }
 
 type Query {
+  note(id: ID!): Note
   project(id: ID!): Project
+  notes: [Note!]!
   projects: [Project!]!
 }
 
 type Mutation {
+  createNote(input: NewNote!): Note
   createProject(input: NewProject!): Project
 }

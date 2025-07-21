@@ -5,6 +5,13 @@ package model
 type Mutation struct {
 }
 
+type NewNote struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	URL         string `json:"url"`
+	Date        string `json:"date"`
+}
+
 type NewProject struct {
 	Title       string   `json:"title"`
 	Description string   `json:"description"`
@@ -13,6 +20,14 @@ type NewProject struct {
 	URL         string   `json:"url"`
 	Giturl      *string  `json:"giturl,omitempty"`
 	Tags        []string `json:"tags"`
+}
+
+type Note struct {
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	URL         string `json:"url"`
+	Date        string `json:"date"`
 }
 
 type Project struct {
