@@ -13,7 +13,7 @@ View the [light-weight front-end](https://github.com/andrewjamesmoore/andrew-pro
 - **Go** (with gqlgen) — GraphQL server
 - **MongoDB** — Database
 - **Docker Compose** — Container orchestration
-- **Nginx** — Reverse proxy and SSL termination
+- **Nginx** — Reverse proxy and SSL
 - **Certbot** — HTTPS via Let's Encrypt
 - **Terraform** — Infrastructure management on AWS EC2
 
