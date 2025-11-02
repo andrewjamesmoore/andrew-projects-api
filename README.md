@@ -1,5 +1,7 @@
 # Projects API
 
+Note: This project is no longer running on production. I am now storing the content locally to avoid AWS costs.
+
 A GraphQL API built with Go and MongoDB for portfolio projects and notes.
 
 Access the production endpoint at: [https://api.andr3w.sh](https://api.andr3w.sh)
