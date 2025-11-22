@@ -1,10 +1,12 @@
 # Projects API
 
-Note: This project is no longer running on production. I am now storing the content locally to avoid AWS costs.
+**Note:** This project is no longer running on production. I am now storing the data on the [front-end](https://github.com/andrewjamesmoore/andrew-projects).
+
+---
 
 A GraphQL API built with Go and MongoDB for portfolio projects and notes.
 
-Access the production endpoint at: [https://api.andr3w.sh](https://api.andr3w.sh)
+Access the production endpoint at: [https://api.andr3w.sh](https://api.andr3w.sh). 
 
 View the [light-weight front-end](https://github.com/andrewjamesmoore/andrew-projects) built using Astro.
 
