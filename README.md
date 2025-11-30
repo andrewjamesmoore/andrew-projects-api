@@ -1,29 +1,72 @@
-# Projects API
+# API for my portfolio and notes frontend (deprecated)
 
-**Note:** This project is no longer running on production. I am now storing the data on the [front-end](https://github.com/andrewjamesmoore/andrew-projects).
+Backend GraphQL API for my personal portfolio site, built in Go. This service provides project and notes data consumed by the frontend.
 
----
+## Table of contents
 
-A GraphQL API built with Go and MongoDB for portfolio projects and notes.
+* [About](#about)
+* [Features](#features)
+* [Tech stack](#tech-stack)
+* [Quick start](#quick-start)
+* [Running / Development](#running--development)
+* [Deployment](#deployment)
+* [License and author](#license-and-author)
 
-Access the production endpoint at: [https://api.andr3w.sh](https://api.andr3w.sh). 
+## About
 
-View the [light-weight front-end](https://github.com/andrewjamesmoore/andrew-projects) built using Astro.
+A GraphQL API built with Go and MongoDB for portfolio projects and notes. The API is consumed by the frontend to render portfolio content dynamically. This project is no longer running in production — the data is now served directly on the frontend.
 
----
+Access the old production endpoint (read-only) at: [https://api.andr3w.sh](https://api.andr3w.sh)
 
-## Stack
+## Features
 
-- **Go** (with gqlgen) — GraphQL server
-- **MongoDB** — Database
-- **Docker Compose** — Container orchestration
-- **Nginx** — Reverse proxy and SSL
-- **Certbot** — HTTPS via Let's Encrypt
-- **Terraform** — Infrastructure management on AWS EC2
+* GraphQL queries for projects and notes
+* Data mutations restricted for security (CORS and no public access)
+* Dockerized for local development and deployment
+* Automatic data updates on the frontend via SSR, no rebuilds required
 
-## Deployment + Workflow
+## Tech stack
 
-- Mutations are locked down (CORS + no public access).
-- Projects are added via CLI or mutation playground.
-- On mutation, the frontend fetches new data automatically via SSR.
-- No rebuilds. No re-deploys. Data changes appear instantly.
+* Go with [gqlgen](https://gqlgen.com) — GraphQL server
+* MongoDB — Database
+* Docker Compose — Container orchestration
+* Nginx — Reverse proxy and SSL termination
+* Certbot — HTTPS via Let’s Encrypt
+* Terraform — AWS EC2 infrastructure management
+
+## Quick start
+
+```bash
+# clone the repo
+git clone https://github.com/andrewjamesmoore/andrew-projects-api.git
+cd andrew-projects-api
+
+# build and run with Docker
+docker-compose up --build
+```
+
+The API will be available locally (default port 8080).
+
+## Running / Development
+
+Run the server locally without Docker:
+
+```bash
+# build the server
+go build -o server ./server.go
+
+# run the server
+./server
+```
+
+## Deployment
+
+* Mutations are locked down; projects are added via CLI or mutation playground.
+* Nginx handles SSL and reverse proxying.
+* Terraform scripts are included for AWS EC2 provisioning.
+
+## License and author
+
+License: MIT
+
+Author: [https://github.com/andrewjamesmoore](https://github.com/andrewjamesmoore)
